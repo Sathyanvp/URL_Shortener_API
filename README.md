@@ -18,11 +18,11 @@ Supports login via **OAuth2 (Google, GitHub)** and **JWT-based API authenticatio
 
 ## 🧱 Tech Stack
 
-- **Java 21
+-  **Java 21**
 - **Spring Boot 3**
 - **Spring Security** (JWT + OAuth2)
 - **Spring Data JPA**
-- **Postgres
+- **Postgres**
 - **JWT (io.jsonwebtoken)**
   
 ---
