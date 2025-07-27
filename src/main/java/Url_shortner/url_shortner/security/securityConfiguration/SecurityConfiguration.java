@@ -11,11 +11,15 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
+
 import Url_shortner.url_shortner.security.securityFilters.JWTFilter;
 
 @Configuration
@@ -76,5 +80,24 @@ public class SecurityConfiguration {
 		return config.getAuthenticationManager();
 		
 	}
+	
+	
+
+	@Bean
+	public HttpFirewall allowUrlEncodedSlashHttpFirewall() {
+	    StrictHttpFirewall firewall = new StrictHttpFirewall();
+	    firewall.setAllowUrlEncodedSlash(true); // allow encoded slashes
+	    firewall.setAllowSemicolon(true);       // allow semicolons
+	    firewall.setAllowUrlEncodedPercent(true); // allow % encoded
+	    firewall.setAllowBackSlash(true); // optional
+	    firewall.setAllowUrlEncodedPeriod(true); // optional
+	    return firewall;
+	}
+
+	@Bean
+	public WebSecurityCustomizer webSecurityCustomizer(HttpFirewall firewall) {
+	    return (web) -> web.httpFirewall(firewall);
+	}
+
 
 }

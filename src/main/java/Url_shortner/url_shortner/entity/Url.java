@@ -31,7 +31,7 @@ public class Url {
 	@Column
 	@Schema(description = "Custom domain to be used for generating the short URL", example = "lazyurl.com")
 	private String domain;
-    
+
 	@Column(nullable=false)
 	@Schema(description = "The creation timestamp of the short URL", example = "2025-07-23T12:00:00")
 	private LocalDateTime createdAt;
@@ -71,6 +71,15 @@ public class Url {
 		this.expiryDate = expiryDate;
 	}
 
+	public String getDomain() {
+		return domain;
+	}
+
+
+
+	public void setDomain(String domain) {
+		this.domain = domain;
+	}
 
 
 	public void setId(int id) {

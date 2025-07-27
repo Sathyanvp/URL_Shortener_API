@@ -13,8 +13,11 @@ public class StatResponse {
 
     @Schema(description = "The original URL", example = "http://google.com/blog/why-you-should-use-a-url-shortener")
     private String originalUrl;
-
-    @Schema(description = "The shortened URL", example = "http://lazyurl.com/abc123")
+    
+	@Schema(description = "Domain of the URL", example = "https://google")
+    private String domain;
+    
+    @Schema(description = "The shortened URL", example = "abc123")
     private String shortUrl;
 
     @Schema(description = "The creation timestamp of the short URL", example = "2025-07-23T12:00:00")
@@ -28,9 +31,10 @@ public class StatResponse {
 
 	//constructor
     
-	public StatResponse(String originalUrl, String shortUrl, LocalDateTime createdAt, LocalDateTime  expiryDate, int clickCount) {
+	public StatResponse(String originalUrl, String domain, String shortUrl, LocalDateTime createdAt, LocalDateTime  expiryDate, int clickCount) {
 	
 		this.originalUrl = originalUrl;
+		this.domain = domain;
 		this.shortUrl = shortUrl;
 		this.createdAt = createdAt;
 		this.expiryDate = expiryDate;
@@ -40,6 +44,14 @@ public class StatResponse {
     public LocalDateTime getExpiryDate() {
 		return expiryDate;
 	}
+    
+    public String getDomain() {
+  		return domain;
+  	}
+
+  	public void setDomain(String domain) {
+  		this.domain = domain;
+  	}
 
 
 	public void setExpiryDate(LocalDateTime expiryDate) {
@@ -50,7 +62,7 @@ public class StatResponse {
     public String getOriginalUrl() {
 		return originalUrl;
 	}
-	public void setOrginalUrl(String originalUrl) {
+	public void setOriginalUrl(String originalUrl) {
 		this.originalUrl = originalUrl;
 	}
 	public String getShortUrl() {

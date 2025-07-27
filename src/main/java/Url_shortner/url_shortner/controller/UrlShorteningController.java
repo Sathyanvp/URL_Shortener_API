@@ -1,6 +1,7 @@
 package Url_shortner.url_shortner.controller;
 
-import java.time.LocalDateTime;
+
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,29 +44,40 @@ public class UrlShorteningController {
 
 
 	@PostMapping("/converturl")
+	@SecurityRequirement(name = "bearerAuth")
 	@Operation(summary = "Convert a long URL to a short URL")
 	@ApiResponses(value = {
 	    @ApiResponse(responseCode = "201", description = "Short URL created", content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
-	    @ApiResponse(responseCode = "400", description = "Invalid URL", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
+	    @ApiResponse(responseCode = "400", description = "Invalid URL", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+	    		examples = @ExampleObject(
+			            value = "{\n" +
+			                    "  \"status\": \"400\",\n" +
+			                    "  \"message\": \"Invalid url\",\n" +
+			                    "  \"timestamp\": \"2025-07-23T18:24:42.880Z\"\n" +
+			                    "}"
+			        ))),
+	    @ApiResponse(responseCode = "410", description = "Custom alias already in use", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
+		examples = @ExampleObject(
+	            value = "{\n" +
+	                    "  \"status\": \"410\",\n" +
+	                    "  \"message\": \"Custom alias already in use\",\n" +
+	                    "  \"timestamp\": \"2025-07-23T18:24:42.880Z\"\n" +
+	                    "}"
+	        )))
 	})
 	public ResponseEntity<?> createShortUrl (@RequestBody UrlRequest urlrequest){
-		String originalUrl = urlrequest.getOriginalUrl();
-		if(!service.isValidUrl(originalUrl)) {
-			ErrorResponse errorResponse = new ErrorResponse( HttpStatus.BAD_REQUEST, "URL Entered Is Not A Valid Http or Https URL", LocalDateTime.now());
-		    return ResponseEntity
-				    .status(HttpStatus.BAD_REQUEST)
-				    .body(errorResponse);
-
-		}
 		
-		    return ResponseEntity
-				.status(HttpStatus.CREATED)
-				.body(service.convertUrl(urlrequest));
+			return ResponseEntity
+					.status(HttpStatus.CREATED)
+					.body(service.convertUrl(urlrequest));
+		
+		  
 	}
 	
 	
 	
 	@GetMapping("/{shortUrl}")
+	@SecurityRequirement(name = "bearerAuth")
 	@Operation(
 	    summary = "Redirect to the original URL",
 	    description = "Redirects the user to the original long URL associated with the short URL",
@@ -73,7 +85,7 @@ public class UrlShorteningController {
 	        @ApiResponse(responseCode = "302", description = "Redirect to original URL"),
 	        @ApiResponse(responseCode = "404", description = "Short URL not found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class))),
 	        @ApiResponse(responseCode = "410", description = "This URL has expired.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class),
-	        examples = @ExampleObject(
+	        examples = @ExampleObject(	
 		            value = "{\n" +
 		                    "  \"status\": \"410\",\n" +
 		                    "  \"message\": \"This URL has expired\",\n" +
@@ -83,20 +95,11 @@ public class UrlShorteningController {
 	    }
 	)
 	public ResponseEntity<?> redirect (@PathVariable String shortUrl){
-		try {
+		
 		
 			return service.redirectUrl(shortUrl);
-		}
-		catch(IllegalArgumentException e) {
-			  ErrorResponse errorResponse = new ErrorResponse( HttpStatus.BAD_REQUEST, "URL Is Not Found", LocalDateTime.now());
-			    return ResponseEntity
-					    .status(HttpStatus.BAD_REQUEST)
-					    .body(errorResponse.toString());
-		}
-		catch(IllegalStateException e) {
-			ErrorResponse errorResponse = new ErrorResponse( HttpStatus.BAD_REQUEST, "URL Is Not Found", LocalDateTime.now());
-		     return ResponseEntity.status(HttpStatus.GONE).body(errorResponse.toString());
-		}
+		
+		
 }
 	
 	
@@ -117,17 +120,9 @@ public class UrlShorteningController {
 	        )))
 	})
 	public ResponseEntity<?> showStatistics (@PathVariable String shortUrl){
-		try {
 	        StatResponse response = service.getStatistics(shortUrl);
 	        return ResponseEntity.ok(response);
-	    } catch (IllegalArgumentException e) {
-	        ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND, e.getMessage(), LocalDateTime.now());
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-	    } catch (Exception e) {
-	        ErrorResponse error = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong", LocalDateTime.now());
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-	    }
-		
+	   
 	}
 	
 }

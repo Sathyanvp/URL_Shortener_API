@@ -3,6 +3,7 @@ package Url_shortner.url_shortner.security.SecurityController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -70,21 +71,12 @@ public class UserController {
 	    }
 	)
 	public ResponseEntity<RegisterResponse> register(@RequestBody Users user) {
-		try {
-    	    if (!service.isUserExists(user)) {
+		
     	    	service.register(user);
     		    return ResponseEntity.status(HttpStatus.CREATED)
-    		            .body(new RegisterResponse("201 CREATED", "User registered successful"));    	}
-    	    else {
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                      .body(new RegisterResponse("409 CONFLICT", "User already exists or registration failed"));
-            }
-        } 
-    	catch (Exception e) {
-             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                   .body(new RegisterResponse("500 INTERNAL SERVER ERROR", "Unexpected error occurred"));
-    	}
-    	
+    		            .body(new RegisterResponse("201 CREATED", "User registered successful"));    	
+    		   
+    	  
 	}
 
 	
@@ -105,8 +97,8 @@ public class UserController {
 		    	    		 
 		    	        )),
 		    	        @ApiResponse(
-		    	            responseCode = "409",
-		    	            description = "User already exists or registration failed",
+		    	            responseCode = "401",
+		    	            description = "Invalid username or password",
 		    	            content = @Content(schema = @Schema(implementation = LoginResponse.class),
 		    	            		examples = @ExampleObject(
 		    	            	            value = "{\n" +
@@ -135,7 +127,7 @@ public class UserController {
 		try {
 	        String token = service.verify(user);
 	        return ResponseEntity.ok(new LoginResponse("200 OK", "Login successful", token));
-	    } catch (BadCredentialsException | UsernameNotFoundException ex) {
+	    } catch (AuthenticationException  ex) {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 	                .body(new LoginResponse("401 UNAUTHORIZED", "Invalid username or password", null));
 	    } catch (Exception e) {

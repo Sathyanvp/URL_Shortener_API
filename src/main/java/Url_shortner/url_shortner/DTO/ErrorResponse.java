@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class ErrorResponse {
 
     @Schema(description = "HTTP status code", example = "404")
-    private HttpStatus statusCode;
+    private int statusCode;
 
     @Schema(description = "Descriptive message of the response", example = "Short URL not found")
     private String message;
@@ -26,20 +26,20 @@ public class ErrorResponse {
 
 
 	public ErrorResponse(HttpStatus statusCode, String message, LocalDateTime timestamp) {
-    	this.statusCode = statusCode;
+    	this.statusCode = statusCode.value();
         this.message = message;
         this.timestamp = timestamp;
         
     }
     
     
-    public HttpStatus getStatusCode() {
+    public int getStatusCode() {
   		return statusCode;
   	}
 
   	
 
-	public void setStatusCode(HttpStatus statusCode) {
+	public void setStatusCode(int statusCode) {
   		this.statusCode = statusCode;
   	}
   	

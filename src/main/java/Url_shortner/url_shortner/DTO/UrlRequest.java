@@ -9,7 +9,7 @@ public class UrlRequest {
     private String originalUrl;
 
     @Schema(description = "Custom alias for shortened URL (optional)", example = "myalias123")
-    private String coustomAlais;
+    private String customAlais;
 
     @Schema(description = "Domain (optional)", example = "lazyurl.com")
     private String domain;
@@ -33,13 +33,13 @@ public class UrlRequest {
 
 
 
-	public String getCoustomAlais() {
-		return coustomAlais;
+	public String getCustomAlais() {
+		return customAlais;
 	}
 
 
-	public void setCoustomAlais(String coustomAlais) {
-		this.coustomAlais = coustomAlais;
+	public void setCustomAlais(String customAlais) {
+		this.customAlais = customAlais;
 	}
 
 
