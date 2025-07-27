@@ -18,7 +18,7 @@ Supports login via **OAuth2 (Google, GitHub)** and **JWT-based API authenticatio
 
 ## 🧱 Tech Stack
 
-- **Java 17**
+- **Java 21
 - **Spring Boot 3**
 - **Spring Security** (JWT + OAuth2)
 - **Spring Data JPA**
@@ -31,8 +31,8 @@ Supports login via **OAuth2 (Google, GitHub)** and **JWT-based API authenticatio
 
 ### ✅ Prerequisites
 
-- Java 17+
-- Maven 3.6+
+- Java 21
+- Maven 4.0
 - OAuth2 Client ID/Secret from Google or GitHub
 
 ---
