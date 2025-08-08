@@ -61,7 +61,7 @@ public class SecurityConfiguration {
 		        		.authenticated())
 		        .httpBasic(Customizer.withDefaults())
 		        .sessionManagement(session ->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//		        .oauth2Login(Customizer.withDefaults())
+		        .oauth2Login(Customizer.withDefaults())
 		        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 		        .build();
 		
@@ -101,3 +101,4 @@ public class SecurityConfiguration {
 
 
 }
+
